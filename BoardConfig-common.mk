@@ -237,12 +237,6 @@ BOARD_USES_GENERIC_AUDIO := true
 
 $(call soong_config_set,aoc_audio_func,ext_hidl,true)
 
-ifneq (,$(filter eng, $(TARGET_BUILD_VARIANT)))
-$(call soong_config_set,aoc_audio_func,dump_usecase_data,true)
-$(call soong_config_set,aoc_audio_func,hal_socket_control,true)
-$(call soong_config_set,aoc_audio_func,record_tuning_keys,true)
-endif
-
 ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 $(call soong_config_set,aoc_audio_func,aosp_build,true)
 endif
@@ -421,8 +415,5 @@ BOARD_KERNEL_CMDLINE += log_buf_len=1024K
 
 # Protected VM firmware
 BOARD_PVMFWIMAGE_PARTITION_SIZE := 0x00100000
-
-# pick up library for cleaning digital car keys on factory reset
--include vendor/google_devices/gs-common/proprietary/BoardConfigVendor.mk
 
 include device/google/gs201/BoardConfigYAAP.mk
