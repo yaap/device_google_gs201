@@ -37,10 +37,11 @@ include device/google/gs-common/sota_app/factoryota.mk
 include device/google/gs-common/misc_writer/misc_writer.mk
 include device/google/gs-common/bootctrl/bootctrl_aidl.mk
 include device/google/gs-common/betterbug/betterbug.mk
-ifneq ($(filter cheetah felix panther, $(TARGET_PRODUCT)),)
+ifneq ($(filter %_cheetah %_felix %_panther, $(TARGET_PRODUCT)),)
   include device/google/gs-common/bcmbt/dump/dumplog.mk
 endif
 include device/google/gs-common/fingerprint/fingerprint.mk
+include device/google/gs-common/nfc/nfc.mk
 
 TARGET_BOARD_PLATFORM := gs201
 
