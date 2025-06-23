@@ -534,29 +534,13 @@
     },
     {
       "Name": "HighestCfsPrioScheduling",
->>>>>>> d6085133 (gs201: Update init scripts and tsk profiles from BP2A.250605.031.A2)
       "Actions": [
         {
-          "Name": "WriteFile",
+          "Name": "SetSchedulerPolicy",
           "Params":
           {
-            "FilePath": "/proc/vendor_sched/uclamp_fork_reset_set",
-            "Value": "<pid>",
-            "LogFailures": "false"
-          }
-        }
-      ]
-    },
-    {
-      "Name": "NoResetUclampGrp",
-      "Actions": [
-        {
-          "Name": "WriteFile",
-          "Params":
-          {
-            "FilePath": "/proc/vendor_sched/uclamp_fork_reset_clear",
-            "Value": "<pid>",
-            "LogFailures": "false"
+            "Policy": "SCHED_OTHER",
+            "Nice": "-20"
           }
         }
       ]
