@@ -72,8 +72,7 @@ PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/interfaces \
 	hardware/google/pixel \
-	device/google/gs201 \
-	device/google/gs201/powerstats
+	device/google/gs201
 
 LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
 
@@ -163,6 +162,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # HWUI
 TARGET_USES_VULKAN = true
+
+# GPU
+PRODUCT_PACKAGES += gpu_probe
 
 # Install the OpenCL ICD Loader
 PRODUCT_SOONG_NAMESPACES += external/OpenCL-ICD-Loader
@@ -334,13 +336,6 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_SOONG_NAMESPACES += \
     hardware/google/camera
-
-# Init-time log settings for Google 3A
-PRODUCT_PACKAGES += libg3a_standalone_gabc_rc
-PRODUCT_PACKAGES += libg3a_standalone_gaf_rc
-PRODUCT_PACKAGES += libg3a_standalone_ghawb_rc
-
-PRODUCT_PACKAGES += lyric_preview_dis_xml
 
 # WideVine modules
 include device/google/gs201/widevine/device.mk
