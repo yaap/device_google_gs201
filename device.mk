@@ -705,8 +705,6 @@ include hardware/google/pixel/common/pixel-common-device.mk
 # Wifi ext
 include hardware/google/pixel/wifi_ext/device.mk
 
-include device/google/gs201/dumpstate/item.mk
-
 # Keymint configuration
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.device_id_attestation.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.device_id_attestation.xml \
