@@ -186,26 +186,6 @@ PRODUCT_VENDOR_PROPERTIES += \
 # b/295257834 Add HDR shaders to SurfaceFlinger's pre-warming cache
 PRODUCT_VENDOR_PROPERTIES += ro.surface_flinger.prime_shader_cache.ultrahdr=1
 
-DEVICE_MANIFEST_FILE := \
-	device/google/gs201/configs/manifests/manifest.xml
-
-# Device Manifest, Device Compatibility Matrix for Treble
-ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
-DEVICE_MANIFEST_FILE += \
-	device/google/gs201/configs/manifests/manifest_media_aosp.xml \
-	device/google/gs201/configs/media/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml
-else
-DEVICE_MANIFEST_FILE += \
-	device/google/gs201/configs/manifests/manifest_media.xml
-
-PRODUCT_COPY_FILES += \
-	device/google/gs201/configs/media/media_codecs_bo_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml \
-	device/google/gs201/configs/media/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_aosp_c2.xml
-endif
-
-DEVICE_MATRIX_FILE := \
-	device/google/gs201/configs/manifests/compatibility_matrix.xml
-
 DEVICE_PACKAGE_OVERLAYS += device/google/gs201/overlay
 
 # This device is shipped with 33 (Android T)
@@ -693,11 +673,6 @@ include hardware/google/pixel/wifi_ext/device.mk
 
 include device/google/gs201/dumpstate/item.mk
 
-# Install product specific framework compatibility matrix
-# (TODO: b/169535506) This includes the FCM for system_ext and product partition.
-# It must be split into the FCM of each partition.
-DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += device/google/gs201/configs/manifests/device_framework_matrix_product.xml
-
 # Keymint configuration
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.device_id_attestation.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.device_id_attestation.xml \
@@ -730,3 +705,11 @@ TARGET_SYSTEM_EXT_PROP += device/google/gs201/system_ext.prop
 # Tethering
 PRODUCT_PACKAGES += \
     TetheringOverlay
+
+# VINTF
+DEVICE_MANIFEST_FILE += \
+    device/google/gs201/vintf/manifest.xml
+DEVICE_MATRIX_FILE += \
+    device/google/gs201/vintf/compatibility_matrix.xml
+DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += \
+    device/google/gs201/vintf/device_framework_matrix_product.xml
