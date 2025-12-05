@@ -72,7 +72,8 @@ PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/interfaces \
 	hardware/google/pixel \
-	device/google/gs201
+	device/google/gs201 \
+	device/google/gs201/powerstats
 
 LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
 
@@ -162,9 +163,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # HWUI
 TARGET_USES_VULKAN = true
-
-# GPU
-PRODUCT_PACKAGES += gpu_probe
 
 # Install the OpenCL ICD Loader
 PRODUCT_SOONG_NAMESPACES += external/OpenCL-ICD-Loader
@@ -315,8 +313,7 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/hearing_aid_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/hearing_aid_audio_policy_configuration_7_0.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
-    frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml
+    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml
 
 # Audio HAL Server & Default Implementations
 PRODUCT_PACKAGES += \
@@ -336,6 +333,13 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_SOONG_NAMESPACES += \
     hardware/google/camera
+
+# Init-time log settings for Google 3A
+PRODUCT_PACKAGES += libg3a_standalone_gabc_rc
+PRODUCT_PACKAGES += libg3a_standalone_gaf_rc
+PRODUCT_PACKAGES += libg3a_standalone_ghawb_rc
+
+PRODUCT_PACKAGES += lyric_preview_dis_xml
 
 # WideVine modules
 include device/google/gs201/widevine/device.mk
