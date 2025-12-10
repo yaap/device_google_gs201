@@ -725,4 +725,8 @@ PRODUCT_PRODUCT_PROPERTIES += \
 
 # Properties
 TARGET_PRODUCT_PROP += device/google/gs201/product.prop
-TARGET_SYSTEM_PROP += device/google/gs201/system.prop
+TARGET_SYSTEM_EXT_PROP += device/google/gs201/system_ext.prop
+
+# Tethering
+PRODUCT_PACKAGES += \
+    TetheringOverlay
