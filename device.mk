@@ -189,8 +189,7 @@ PRODUCT_VENDOR_PROPERTIES += ro.surface_flinger.prime_shader_cache.ultrahdr=1
 # Device Manifest, Device Compatibility Matrix for Treble
 ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 DEVICE_MANIFEST_FILE += \
-	device/google/gs201/configs/manifests/manifest_media_aosp.xml
-
+	device/google/gs201/configs/manifests/manifest_media_aosp.xml \
 	device/google/gs201/configs/media/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml
 else
 DEVICE_MANIFEST_FILE += \
@@ -720,3 +719,7 @@ include device/google/gs-common/touch/twoshay/twoshay.mk
 # since it can't be overridden from /vendor.
 PRODUCT_PRODUCT_PROPERTIES += \
 	dumpstate.strict_run=false
+
+# Properties
+TARGET_PRODUCT_PROP += device/google/gs201/product.prop
+TARGET_SYSTEM_PROP += device/google/gs201/system.prop
