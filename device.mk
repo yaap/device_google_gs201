@@ -186,6 +186,9 @@ PRODUCT_VENDOR_PROPERTIES += \
 # b/295257834 Add HDR shaders to SurfaceFlinger's pre-warming cache
 PRODUCT_VENDOR_PROPERTIES += ro.surface_flinger.prime_shader_cache.ultrahdr=1
 
+DEVICE_MANIFEST_FILE := \
+	device/google/gs201/configs/manifests/manifest.xml
+
 # Device Manifest, Device Compatibility Matrix for Treble
 ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 DEVICE_MANIFEST_FILE += \
