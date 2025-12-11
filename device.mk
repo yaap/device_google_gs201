@@ -57,12 +57,6 @@ VENDOR_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 # Set boot SPL
 BOOT_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 
-# TODO(b/207450311): Remove this flag once implemented
-USE_PIXEL_GRALLOC := false
-ifeq ($(USE_PIXEL_GRALLOC),true)
-	PRODUCT_SOONG_NAMESPACES += hardware/google/gchips/GrallocHAL
-endif
-
 PRODUCT_SOONG_NAMESPACES += \
 	hardware/google/av \
 	hardware/google/interfaces \
@@ -71,11 +65,6 @@ PRODUCT_SOONG_NAMESPACES += \
 	device/google/gs201/powerstats
 
 LOCAL_KERNEL := $(TARGET_KERNEL_DIR)/Image.lz4
-
-ifeq ($(RELEASE_AVF_ENABLE_LLPVM_CHANGES),true)
-	# Set the environment variable to enable the Secretkeeper HAL service.
-	SECRETKEEPER_ENABLED := true
-endif
 
 # OEM Unlock reporting
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -86,8 +75,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.telephony.default_network=27 \
 	persist.vendor.ril.db_ecc.use.iccid_to_plmn=1 \
 	persist.vendor.ril.db_ecc.id.type=5
-	#rild.libpath=/system/lib64/libsec-ril.so \
-	#rild.libargs=-d /dev/umts_ipc0
 
 # SIT-RIL Logging setting
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -163,46 +150,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	telephony.active_modems.max_count=2
 
-USE_LASSEN_OEMHOOK := true
-# The "power-anomaly-sitril" is added into PRODUCT_SOONG_NAMESPACES when
-# $(USE_LASSEN_OEMHOOK) is true and $(BOARD_WITHOUT_RADIO) is not true.
-ifneq ($(BOARD_WITHOUT_RADIO),true)
-    $(call soong_config_set,sitril,use_lassen_oemhook_with_radio,true)
-endif
-
-# Use for GRIL
-USES_LASSEN_MODEM := true
-$(call soong_config_set, vendor_ril_google_feature, use_lassen_modem, true)
-ifneq ($(BOARD_WITHOUT_RADIO),true)
-$(call soong_config_set_bool,grilservice,use_google_qns,true)
-endif
-
-ifeq ($(USES_GOOGLE_DIALER_CARRIER_SETTINGS),true)
-USE_GOOGLE_DIALER := true
-USE_GOOGLE_CARRIER_SETTINGS := true
-endif
-
-ifeq ($(USES_GOOGLE_PREBUILT_MODEM_SVC),true)
-USE_GOOGLE_PREBUILT_MODEM_SVC := true
-endif
-
-# Audio client implementation for RIL
-USES_GAUDIO := true
-
-# ######################
-# GRAPHICS - GPU (begin)
-
-# Must match BOARD_USES_SWIFTSHADER in BoardConfig.mk
-USE_SWIFTSHADER := false
-
 # HWUI
-ifeq ($(USE_SWIFTSHADER),true)
-	TARGET_USES_VULKAN = false
-else
-	TARGET_USES_VULKAN = true
-endif
-
-$(call soong_config_set,pixel_mali,soc,$(TARGET_BOARD_PLATFORM))
+TARGET_USES_VULKAN = true
 
 include device/google/gs-common/gpu/gpu.mk
 PRODUCT_PACKAGES += \
@@ -221,6 +170,10 @@ PRODUCT_PACKAGES += \
 	mali_icd__customer_pixel_opencl-icd_ARM32.icd
 endif
 
+PRODUCT_VENDOR_PROPERTIES += \
+	ro.hardware.egl=mali \
+	ro.hardware.vulkan=mali
+
 # Mali Configuration Properties
 PRODUCT_VENDOR_PROPERTIES += \
 	vendor.mali.platform.config=/vendor/etc/mali/platform.config \
@@ -237,22 +190,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.software.vulkan.deqp.level-2025-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
 	frameworks/native/data/etc/android.software.opengles.deqp.level-2025-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml
 
-ifeq ($(USE_SWIFTSHADER),true)
-PRODUCT_PACKAGES += \
-	vulkan.pastel
-endif
-
-ifeq ($(USE_SWIFTSHADER),true)
-PRODUCT_VENDOR_PROPERTIES += \
-	ro.hardware.egl = mali \
-	persist.graphics.egl = angle \
-	ro.hardware.vulkan = pastel
-else
-PRODUCT_VENDOR_PROPERTIES += \
-	ro.hardware.egl = mali \
-	ro.hardware.vulkan = mali
-endif
-
 # Configure EGL blobcache
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.egl.blobcache.multifile=true \
@@ -265,19 +202,11 @@ PRODUCT_VENDOR_PROPERTIES += \
 # b/295257834 Add HDR shaders to SurfaceFlinger's pre-warming cache
 PRODUCT_VENDOR_PROPERTIES += ro.surface_flinger.prime_shader_cache.ultrahdr=1
 
-# GRAPHICS - GPU (end)
-# ####################
-
 # Device Manifest, Device Compatibility Matrix for Treble
-DEVICE_MANIFEST_FILE := \
-	device/google/gs201/configs/manifests/manifest.xml
-
-BOARD_USE_CODEC2_AIDL := V1
 ifneq (,$(filter aosp_%,$(TARGET_PRODUCT)))
 DEVICE_MANIFEST_FILE += \
 	device/google/gs201/configs/manifests/manifest_media_aosp.xml
 
-PRODUCT_COPY_FILES += \
 	device/google/gs201/configs/media/media_codecs_aosp_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml
 else
 DEVICE_MANIFEST_FILE += \
@@ -309,13 +238,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 	device/google/gs201/conf/init.gs201.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.rc
 
-ifneq (,$(filter 5.%, $(TARGET_LINUX_KERNEL_VERSION)))
-PRODUCT_COPY_FILES += \
-	device/google/gs201/storage/5.10/init.gs201.storage.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.storage.rc
-else
 PRODUCT_COPY_FILES += \
 	device/google/gs201/storage/6.1/init.gs201.storage.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.gs201.storage.rc
-endif
 
 # Recovery files
 PRODUCT_COPY_FILES += \
@@ -351,7 +275,6 @@ PRODUCT_HOST_PACKAGES += \
 include device/google/gs-common/chre/hal.mk
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.context_hub.xml
-CHRE_DEDICATED_TRANSPORT_CHANNEL_ENABLED := true
 PRODUCT_PACKAGES += \
 	preloaded_nanoapps.json
 
@@ -382,9 +305,6 @@ endif
 PRODUCT_PACKAGES += \
 	tlrpmb
 
-# Touch firmware
-#PRODUCT_COPY_FILES += \
-	device/google/gs201/firmware/touch/s6sy761.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/s6sy761.fw
 # Touch
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
@@ -441,36 +361,10 @@ PRODUCT_PACKAGES += \
 # Audio HALs
 #
 
-# Audio Configurations
-USE_LEGACY_LOCAL_AUDIO_HAL := false
-USE_XML_AUDIO_POLICY_CONF := 1
-
 # Enable AAudio MMAP/NOIRQ data path.
 PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_policy=2
 PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_exclusive_policy=2
 PRODUCT_PROPERTY_OVERRIDES += aaudio.hw_burst_min_usec=2000
-
-# Calliope firmware overwrite
-#PRODUCT_COPY_FILES += \
-	device/google/gs201/firmware/calliope_dram.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_dram.bin \
-	device/google/gs201/firmware/calliope_sram.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_sram.bin \
-	device/google/gs201/firmware/calliope_dram_2.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_dram_2.bin \
-	device/google/gs201/firmware/calliope_sram_2.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope_sram_2.bin \
-	device/google/gs201/firmware/calliope2.dt:$(TARGET_COPY_OUT_VENDOR)/firmware/calliope2.dt \
-
-# Cannot reference variables defined in BoardConfig.mk, uncomment this if
-# BOARD_USE_OFFLOAD_AUDIO and BOARD_USE_OFFLOAD_EFFECT are true
-## AudioEffectHAL library
-#PRODUCT_PACKAGES += \
-#	libexynospostprocbundle
-
-# Cannot reference variables defined in BoardConfig.mk, uncomment this if
-# BOARD_USE_SOUNDTRIGGER_HAL is true
-#PRODUCT_PACKAGES += \
-#	sound_trigger.primary.maran9820
-
-# A-Box Service Daemon
-#PRODUCT_PACKAGES += main_abox
 
 # Libs
 PRODUCT_PACKAGES += \
@@ -493,34 +387,7 @@ include device/google/gs201/widevine/device.mk
 PRODUCT_PACKAGES += \
 	liboemcrypto \
 
-PANTHER_PRODUCT := %panther
-CHEETAH_PRODUCT := %cheetah
-LYNX_PRODUCT := %lynx
-FELIX_PRODUCT := %felix
-CLOUDRIPPER_PRODUCT := %cloudripper
-TANGOR_PRODUCT := %tangorpro
-ifneq (,$(filter $(PANTHER_PRODUCT), $(TARGET_PRODUCT)))
-        LOCAL_TARGET_PRODUCT := panther
-else ifneq (,$(filter $(CHEETAH_PRODUCT), $(TARGET_PRODUCT)))
-        LOCAL_TARGET_PRODUCT := cheetah
-else ifneq (,$(filter $(LYNX_PRODUCT), $(TARGET_PRODUCT)))
-        LOCAL_TARGET_PRODUCT := lynx
-else ifneq (,$(filter $(FELIX_PRODUCT), $(TARGET_PRODUCT)))
-        LOCAL_TARGET_PRODUCT := felix
-else ifneq (,$(filter $(CLOUDRIPPER_PRODUCT), $(TARGET_PRODUCT)))
-        LOCAL_TARGET_PRODUCT := cloudripper
-else ifneq (,$(filter $(TANGOR_PRODUCT), $(TARGET_PRODUCT)))
-        LOCAL_TARGET_PRODUCT := tangorpro
-else
-        # WAR: continue defaulting to slider build on gs201 to not
-        # break dev targets such as ravenclaw
-        LOCAL_TARGET_PRODUCT := slider
-endif
-
-# Lyric Camera HAL settings
 include device/google/gs-common/camera/lyric.mk
-$(call soong_config_set,lyric,soc,gs201)
-$(call soong_config_set,google3a_config,soc,gs201)
 
 # WiFi
 PRODUCT_PACKAGES += \
@@ -556,13 +423,6 @@ ifeq (,$(filter true, $(BOARD_WITHOUT_DTLS)))
 include device/google/gs-common/dauntless/gsc.mk
 endif
 
-# Copy Camera HFD Setfiles
-#PRODUCT_COPY_FILES += \
-	device/google/gs201/firmware/camera/libhfd/default_configuration.hfd.cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/default_configuration.hfd.cfg.json \
-	device/google/gs201/firmware/camera/libhfd/pp_cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/pp_cfg.json \
-	device/google/gs201/firmware/camera/libhfd/tracker_cfg.json:$(TARGET_COPY_OUT_VENDOR)/firmware/tracker_cfg.json \
-	device/google/gs201/firmware/camera/libhfd/WithLightFixNoBN.SDNNmodel:$(TARGET_COPY_OUT_VENDOR)/firmware/WithLightFixNoBN.SDNNmodel
-
 # WiFi
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
@@ -589,12 +449,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.camera.concurrent.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.concurrent.xml \
 	frameworks/native/data/etc/android.hardware.camera.full.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.full.xml\
 	frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml\
-
-#PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml \
-	frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
-	frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
-	frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
 
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.audio.low_latency.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.low_latency.xml \
@@ -654,12 +508,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += vendor.hwc.dpp.downscale=2
 
 # Cannot reference variables defined in BoardConfig.mk, uncomment this if
-# BOARD_USES_EXYNOS_DSS_FEATURE is true
-## set the dss enable status setup
-#PRODUCT_PROPERTY_OVERRIDES += \
-#        ro.exynos.dss=1
-
-# Cannot reference variables defined in BoardConfig.mk, uncomment this if
 # BOARD_USES_EXYNOS_AFBC_FEATURE is true
 # set the dss enable status setup
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -680,10 +528,6 @@ PRODUCT_PACKAGES += wpa_supplicant
 PRODUCT_PACKAGES += wpa_supplicant.conf
 
 WIFI_PRIV_CMD_UPDATE_MBO_CELL_STATUS := enabled
-
-####################################
-## VIDEO
-####################################
 
 $(call soong_config_set,bigo,soc,gs201)
 
@@ -721,14 +565,6 @@ PRODUCT_COPY_FILES += \
 	device/google/gs201/configs/media/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
 	device/google/gs201/configs/media/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml
 
-# Telephony
-#PRODUCT_COPY_FILES += \
-	frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_telephony.xml
-
-# CBD (CP booting deamon)
-CBD_USE_V2 := true
-CBD_PROTOCOL_SIT := true
-
 # setup dalvik vm configs.
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
@@ -737,11 +573,6 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 # Exynos OpenVX framework
 PRODUCT_PACKAGES += \
 		libexynosvision
-
-ifeq ($(TARGET_USES_CL_KERNEL),true)
-PRODUCT_PACKAGES += \
-	libopenvx-opencl
-endif
 
 # Trusty (KM, GK, Storage)
 $(call inherit-product, system/core/trusty/trusty-storage.mk)
@@ -758,7 +589,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	trusty_metricsd
 
-$(call soong_config_set,google_displaycolor,displaycolor_platform,gs201)
 PRODUCT_PACKAGES += \
 	libdisplaycolor
 
@@ -810,34 +640,11 @@ PRODUCT_PACKAGES += \
 	libstagefright_hdcp \
 	libskia_opt
 
-#PRODUCT_PACKAGES += \
-	mfc_fw.bin \
-	calliope_sram.bin \
-	calliope_dram.bin \
-	calliope_iva.bin \
-	vts.bin
-
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 PRODUCT_PACKAGES += ShannonIms
 
 PRODUCT_PACKAGES += ShannonRcs
 endif
-
-# Exynos RIL and telephony
-# Multi SIM(DSDS)
-SIM_COUNT := 2
-$(call soong_config_set,sim,sim_count,$(SIM_COUNT))
-SUPPORT_MULTI_SIM := true
-# Support NR
-SUPPORT_NR := true
-# Support 5G on both stacks
-SUPPORT_NR_DS := true
-# Using IRadio 2.0
-USE_RADIO_HAL_2_0 := true
-# Support SecureElement HAL for HIDL
-USE_SE_HIDL := true
-# Using Early Send Device Info
-USE_EARLY_SEND_DEVICE_INFO := true
 
 ifneq ($(BOARD_WITHOUT_RADIO),true)
 # modem logging binary/configs
@@ -872,7 +679,6 @@ endif
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 
 include device/google/gs-common/sensors/sensors.mk
-$(call soong_config_set,usf,target_soc,gs201)
 
 PRODUCT_COPY_FILES += \
 	device/google/gs201/configs/manifests/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
@@ -892,17 +698,11 @@ PRODUCT_PACKAGES += \
 	android.hardware.health-service.gs201 \
 	android.hardware.health-service.gs201_recovery \
 
-# Audio
 # Audio HAL Server & Default Implementations
 include device/google/gs-common/audio/hidl_gs201.mk
 
-## AoC soong
-$(call soong_config_set,aoc,target_soc,$(TARGET_BOARD_PLATFORM))
-$(call soong_config_set,aoc,target_product,$(TARGET_PRODUCT))
-
-#
 ## Audio properties
-ifneq (,$(filter $(TANGOR_PRODUCT), $(TARGET_PRODUCT)))
+ifneq (,$(filter %tangopro, $(TARGET_PRODUCT)))
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.config.vc_call_vol_steps=7 \
 	ro.config.media_vol_steps=20 \
@@ -938,8 +738,6 @@ PRODUCT_PROPERTY_OVERRIDES += persist.vendor.enable.thermal.genl=true
 
 # EdgeTPU
 include device/google/gs-common/edgetpu/edgetpu.mk
-# Config variables for TPU chip on device.
-$(call soong_config_set,edgetpu_config,chip,janeiro)
 
 # TPU firmware
 PRODUCT_PACKAGES += edgetpu-janeiro.fw
@@ -959,6 +757,9 @@ PRODUCT_PACKAGES += \
 # pKVM
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
 PRODUCT_BUILD_PVMFW_IMAGE := true
+
+# Set the environment variable to enable the Secretkeeper HAL service.
+SECRETKEEPER_ENABLED := true
 
 # Enable to build standalone vendor_kernel_boot image.
 PRODUCT_BUILD_VENDOR_KERNEL_BOOT_IMAGE := true
@@ -987,9 +788,6 @@ include hardware/google/pixel/common/pixel-common-device.mk
 
 # Pixel Logger
 include hardware/google/pixel/PixelLogger/PixelLogger.mk
-
-# RadioExt Version
-USES_RADIOEXT_V1_5 = true
 
 # Wifi ext
 include hardware/google/pixel/wifi_ext/device.mk
