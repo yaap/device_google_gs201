@@ -154,21 +154,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 TARGET_USES_VULKAN = true
 
 include device/google/gs-common/gpu/gpu.mk
-PRODUCT_PACKAGES += \
-	csffw_image_prebuilt__firmware_prebuilt_todx_mali_csffw.bin \
-	libGLES_mali \
-	vulkan.mali \
-	libgpudataproducer \
 
 # Install the OpenCL ICD Loader
 PRODUCT_SOONG_NAMESPACES += external/OpenCL-ICD-Loader
 PRODUCT_PACKAGES += \
-       libOpenCL \
-       mali_icd__customer_pixel_opencl-icd_ARM.icd
-ifeq ($(DEVICE_IS_64BIT_ONLY),false)
-PRODUCT_PACKAGES += \
-	mali_icd__customer_pixel_opencl-icd_ARM32.icd
-endif
+       libOpenCL
 
 PRODUCT_VENDOR_PROPERTIES += \
 	ro.hardware.egl=mali \
@@ -275,14 +265,6 @@ PRODUCT_HOST_PACKAGES += \
 include device/google/gs-common/chre/hal.mk
 PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.context_hub.xml
-PRODUCT_PACKAGES += \
-	preloaded_nanoapps.json
-
-# Filesystem management tools
-PRODUCT_PACKAGES += \
-	linker.vendor_ramdisk \
-	tune2fs.vendor_ramdisk \
-	resize2fs.vendor_ramdisk
 
 # Filesystem: convert /dev/block/by-name/persist to ext4 (b/239632964)
 PRODUCT_COPY_FILES += \
@@ -300,10 +282,6 @@ else
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.vendor.verbose_logging_enabled=false
 endif
-
-# RPMB TA
-PRODUCT_PACKAGES += \
-	tlrpmb
 
 # Touch
 PRODUCT_COPY_FILES += \
@@ -366,33 +344,10 @@ PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_policy=2
 PRODUCT_PROPERTY_OVERRIDES += aaudio.mmap_exclusive_policy=2
 PRODUCT_PROPERTY_OVERRIDES += aaudio.hw_burst_min_usec=2000
 
-# Libs
-PRODUCT_PACKAGES += \
-	com.android.future.usb.accessory
-
-PRODUCT_PACKAGES += \
-	android.hardware.memtrack-service.pixel \
-	libion_exynos \
-	libion
-
-PRODUCT_PACKAGES += \
-	libhwjpeg
-
-# Video Editor
-PRODUCT_PACKAGES += \
-	VideoEditorGoogle
-
 # WideVine modules
 include device/google/gs201/widevine/device.mk
-PRODUCT_PACKAGES += \
-	liboemcrypto \
 
 include device/google/gs-common/camera/lyric.mk
-
-# WiFi
-PRODUCT_PACKAGES += \
-	wificond \
-	libwpa_client
 
 # Connectivity
 PRODUCT_PACKAGES += \
@@ -570,27 +525,12 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
-# Exynos OpenVX framework
-PRODUCT_PACKAGES += \
-		libexynosvision
-
 # Trusty (KM, GK, Storage)
 $(call inherit-product, system/core/trusty/trusty-storage.mk)
 $(call inherit-product, system/core/trusty/trusty-base.mk)
 
 # Trusty dump
 include device/google/gs-common/trusty/trusty.mk
-
-# Trusty Secure DPU Daemon
-PRODUCT_PACKAGES += \
-	securedpud.slider
-
-# Trusty Metrics Daemon
-PRODUCT_PACKAGES += \
-	trusty_metricsd
-
-PRODUCT_PACKAGES += \
-	libdisplaycolor
 
 # Storage: for factory reset protection feature
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -600,10 +540,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PRODUCT_PROPERTIES += \
 	persist.bluetooth.bqr.event_mask?=30 \
 	persist.bluetooth.bqr.min_interval_ms=500
-
-#VNDK
-PRODUCT_PACKAGES += \
-	vndk-libs
 
 PRODUCT_ENFORCE_RRO_TARGETS := \
 	framework-res
@@ -635,21 +571,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	Iwlan
 
-PRODUCT_PACKAGES += \
-	whitelist \
-	libstagefright_hdcp \
-	libskia_opt
-
 ifneq ($(BOARD_WITHOUT_RADIO),true)
-PRODUCT_PACKAGES += ShannonIms
-
-PRODUCT_PACKAGES += ShannonRcs
-endif
-
-ifneq ($(BOARD_WITHOUT_RADIO),true)
-# modem logging binary/configs
-PRODUCT_PACKAGES += modem_logging_control
-
 # CP Logging properties
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.vendor.sys.modem.logging.loc = /data/vendor/slog \
@@ -721,15 +643,6 @@ endif
 PRODUCT_PACKAGES += vndservicemanager
 PRODUCT_PACKAGES += vndservice
 
-PRODUCT_PACKAGES += \
-	google.hardware.media.c2@1.0-service \
-	libgc2_store \
-	libgc2_base \
-	libgc2_av1_dec \
-	libbo_av1 \
-	libgc2_cwl \
-	libgc2_utils
-
 ## Start packet router
 include device/google/gs201/telephony/pktrouter.mk
 
@@ -738,13 +651,6 @@ PRODUCT_PROPERTY_OVERRIDES += persist.vendor.enable.thermal.genl=true
 
 # EdgeTPU
 include device/google/gs-common/edgetpu/edgetpu.mk
-
-# TPU firmware
-PRODUCT_PACKAGES += edgetpu-janeiro.fw
-
-# Connectivity Thermal Power Manager
-PRODUCT_PACKAGES += \
-	ConnectivityThermalPowerManager
 
 # A/B support
 PRODUCT_PACKAGES += \
@@ -785,9 +691,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Project
 include hardware/google/pixel/common/pixel-common-device.mk
-
-# Pixel Logger
-include hardware/google/pixel/PixelLogger/PixelLogger.mk
 
 # Wifi ext
 include hardware/google/pixel/wifi_ext/device.mk
