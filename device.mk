@@ -555,10 +555,6 @@ endif
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 
-PRODUCT_COPY_FILES += \
-	device/google/gs201/configs/manifests/default-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/default-permissions/default-permissions.xml \
-	device/google/gs201/configs/manifests/component-overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sysconfig/component-overrides.xml
-
 PRODUCT_PACKAGES += \
 	android.hardware.health-service.gs201 \
 	android.hardware.health-service.gs201_recovery \
