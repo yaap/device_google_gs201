@@ -334,9 +334,6 @@ PRODUCT_PACKAGES += libg3a_standalone_ghawb_rc
 
 PRODUCT_PACKAGES += lyric_preview_dis_xml
 
-# WideVine modules
-include device/google/gs201/widevine/device.mk
-
 # Connectivity
 PRODUCT_PACKAGES += \
         ConnectivityOverlay
@@ -587,7 +584,6 @@ PRODUCT_PACKAGES += vndservicemanager
 PRODUCT_PACKAGES += vndservice
 
 ## Start packet router
-include device/google/gs201/telephony/pktrouter.mk
 PRODUCT_PROPERTY_OVERRIDES += vendor.pktrouter=1
 
 # Thermal HAL
