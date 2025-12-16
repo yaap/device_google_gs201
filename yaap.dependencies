@@ -1,8 +1,0 @@
-[
-  {
-    "repository": "android/device/google/gs-common",
-    "target_path": "device/google/gs-common",
-    "branch": "android-15.0.0_r30",
-    "remote": "aosp"
-  }
-]
