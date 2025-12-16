@@ -53,13 +53,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     misc_writer
 
-# Boot control
-PRODUCT_PACKAGES += \
-    android.hardware.boot-service.default-pixel \
-    android.hardware.boot-service.default_recovery-pixel
-
-PRODUCT_SOONG_NAMESPACES += device/google/gs-common/bootctrl/aidl
-
 TARGET_BOARD_PLATFORM := gs201
 
 AB_OTA_POSTINSTALL_CONFIG += \
