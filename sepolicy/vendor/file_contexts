@@ -271,7 +271,6 @@
 /vendor/bin/hw/android\.hardware\.drm-service\.clearkey u:object_r:hal_drm_clearkey_exec:s0
 /vendor/bin/hw/android\.hardware\.drm-service\.widevine u:object_r:hal_drm_widevine_exec:s0
 /vendor/bin/hw/android\.hardware\.dumpstate\.3-service u:object_r:hal_dumpstate_default_exec:s0
-/vendor/bin/hw/android\.hardware\.edgetpu\.logging@service-edgetpu-logging u:object_r:edgetpu_logging_exec:s0
 /vendor/bin/hw/android\.hardware\.gatekeeper-service\.trusty u:object_r:hal_gatekeeper_default_exec:s0
 /vendor/bin/hw/android\.hardware\.gatekeeper@1\.0-service\.trusty u:object_r:hal_gatekeeper_default_exec:s0
 /vendor/bin/hw/android\.hardware\.gxp\.logging@service-gxp-logging u:object_r:gxp_logging_exec:s0
