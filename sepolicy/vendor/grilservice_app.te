@@ -1,6 +1,5 @@
 hal_client_domain(grilservice_app, hal_power_stats)
 
-binder_call(grilservice_app, hal_audiometricext_default)
 binder_call(grilservice_app, hal_bluetooth_btlinux)
 binder_call(grilservice_app, hal_radioext_default)
 binder_call(grilservice_app, hal_wifi_ext)
@@ -9,7 +8,6 @@ binder_call(grilservice_app, rild)
 r_dir_file(grilservice_app, sysfs_irq)
 
 allow grilservice_app app_api_service:service_manager find;
-allow grilservice_app hal_audiometricext_hwservice:hwservice_manager find;
 allow grilservice_app hal_bluetooth_coexistence_hwservice:hwservice_manager find;
 allow grilservice_app hal_exynos_rild_hwservice:hwservice_manager find;
 allow grilservice_app hal_radioext_hwservice:hwservice_manager find;

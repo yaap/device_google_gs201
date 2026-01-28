@@ -148,7 +148,6 @@ genfscon sysfs /devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/panel_extin
 genfscon sysfs /devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/serial_number u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/1c2d0000.drmdsim/1c2d0000.drmdsim.0/panel_extinfo u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/1c2d0000.drmdsim/1c2d0000.drmdsim.0/serial_number u:object_r:sysfs_display:s0
-genfscon sysfs /devices/platform/debugcore/sscoredump/sscd_debugcore/report_count u:object_r:sysfs_sscoredump_subsystem_report_count:s0
 genfscon sysfs /devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/min_vrefresh u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/osc2_clk_khz u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/refresh_rate u:object_r:sysfs_display:s0
@@ -156,8 +155,6 @@ genfscon sysfs /devices/platform/1c2d0000.drmdsim/1c2d0000.drmdsim.0/refresh_rat
 genfscon sysfs /devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/power_state u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/1c2d0000.drmdsim/1c2d0000.drmdsim.0/power_state u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/19000000.aoc/com.google.chre.non_wake_up/wakeup u:object_r:sysfs_wakeup:s0
-genfscon sysfs /devices/platform/bigocean/sscoredump/sscd_bigocean/report_count u:object_r:sysfs_sscoredump_subsystem_report_count:s0
-genfscon sysfs /devices/platform/mfc-core/sscoredump/sscd_mfc-core/report_count u:object_r:sysfs_sscoredump_subsystem_report_count:s0
 genfscon sysfs /devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/panel_idle u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/panel_name u:object_r:sysfs_display:s0
 genfscon sysfs /devices/platform/1c2c0000.drmdsim/1c2c0000.drmdsim.0/power_mode u:object_r:sysfs_display:s0
@@ -187,8 +184,6 @@ genfscon sysfs /devices/platform/10d60000.hsi2c/i2c-13/13-0057/chg_stats u:objec
 genfscon sysfs /devices/platform/google,cpm/power_supply/gcpm_pps/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/19000000.aoc/control/ring_buffer_wakeup u:object_r:sysfs_aoc_dumpstate:s0
 genfscon sysfs /devices/platform/audiometrics/adapted_info_active_count u:object_r:sysfs_pixelstats:s0
-genfscon sysfs /devices/platform/wlan/sscoredump/sscd_wlan/report_count u:object_r:sysfs_sscoredump_subsystem_report_count:s0
-genfscon sysfs /devices/platform/mali/sscoredump/sscd_mali/report_count u:object_r:sysfs_sscoredump_subsystem_report_count:s0
 genfscon sysfs /devices/platform/odm/odm:fps_touch_handler/power/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/google,usbc_port_cooling_dev/trip_time u:object_r:sysfs_usbc_throttling_stats:s0
 genfscon sysfs /devices/platform/19000000.aoc/notify_timeout_aoc_status u:object_r:sysfs_aoc_notifytimeout:s0
@@ -197,7 +192,6 @@ genfscon sysfs /devices/platform/14700000.ufs/host0/target0:0:0/0:0:0: u:object_
 genfscon sysfs /devices/platform/19000000.aoc/control/memory_exception u:object_r:sysfs_aoc_dumpstate:s0
 genfscon sysfs /devices/platform/19000000.aoc/control/memory_votes_a32 u:object_r:sysfs_aoc_dumpstate:s0
 genfscon sysfs /devices/platform/19000000.aoc/control/memory_votes_ff1 u:object_r:sysfs_aoc_dumpstate:s0
-genfscon sysfs /devices/platform/aoc/sscoredump/sscd_aoc/report_count u:object_r:sysfs_sscoredump_subsystem_report_count:s0
 genfscon sysfs /devices/platform/14700000.ufs/attributes/wb_avail_buf u:object_r:sysfs_scsi_devices_0000:s0
 genfscon sysfs /devices/platform/10da0000.hsi2c/i2c-15/15-0050/eeprom u:object_r:sysfs_batteryinfo:s0
 genfscon sysfs /devices/platform/10d60000.hsi2c/i2c-13/13-0025/extcon u:object_r:sysfs_extcon:s0
@@ -356,7 +350,6 @@ genfscon sysfs /devices/platform/google,cpm u:object_r:sysfs_batteryinfo:s0
 genfscon sysfs /kernel/vendor_mm/pa_kill u:object_r:sysfs_pakills:s0
 genfscon sysfs /devices/virtual/powercap u:object_r:sysfs_thermal:s0
 genfscon sysfs /devices/virtual/thermal u:object_r:sysfs_thermal:s0
-genfscon sysfs /class/sscoredump/level u:object_r:sysfs_sscoredump_level:s0
 genfscon sysfs /devices/soc0/revision u:object_r:sysfs_soc:s0
 genfscon sysfs /devices/soc0/machine u:object_r:sysfs_soc:s0
 genfscon sysfs /thermal_zone14/mode u:object_r:sysfs_thermal:s0

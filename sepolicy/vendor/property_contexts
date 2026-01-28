@@ -86,7 +86,6 @@ vendor.pktrouter u:object_r:vendor_ims_prop:s0
 vendor.radio. u:object_r:vendor_rild_prop:s0
 vendor.ril. u:object_r:vendor_rild_prop:s0
 vendor.sys.diag. u:object_r:vendor_diag_prop:s0
-vendor.sys.dmd. u:object_r:vendor_diag_prop:s0
 vendor.sys.exynos.modempath u:object_r:vendor_modem_prop:s0
 vendor.sys.exynos.slog. u:object_r:vendor_slog_prop:s0
 vendor.sys.modem. u:object_r:vendor_modem_prop:s0

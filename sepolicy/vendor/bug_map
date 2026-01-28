@@ -1,4 +1,3 @@
-dump_modem sscoredump_vendor_data_logcat_file dir b/422941831
 hal_bluetooth_synabtlinux device chr_file b/440967127
 hal_camera_default system_userdir_file dir b/435072101
 hal_health_default sysfs_typec dir b/443867649

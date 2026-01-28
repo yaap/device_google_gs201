@@ -2,7 +2,6 @@ type vendor_telephony_silentlogging_app, domain;
 
 app_domain(vendor_telephony_silentlogging_app)
 
-binder_call(vendor_telephony_silentlogging_app, dmd)
 
 set_prop(vendor_telephony_silentlogging_app, vendor_modem_prop)
 set_prop(vendor_telephony_silentlogging_app, vendor_slog_prop)
