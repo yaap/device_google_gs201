@@ -342,9 +342,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	android.hardware.health.storage-service.default
 
-# storage pixelstats
--include hardware/google/pixel/pixelstats/device.mk
-
 # Battery Mitigation
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.battery_mitigation.aidl.enable=true
