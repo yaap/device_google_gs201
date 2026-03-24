@@ -549,10 +549,6 @@ endif
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 
-PRODUCT_PACKAGES += \
-	android.hardware.health-service.gs201 \
-	android.hardware.health-service.gs201_recovery \
-
 ## Audio properties
 ifneq (,$(filter %tangopro, $(TARGET_PRODUCT)))
 PRODUCT_PROPERTY_OVERRIDES += \
