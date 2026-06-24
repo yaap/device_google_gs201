@@ -30,11 +30,6 @@ DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += \
 # sscoredump
 PRODUCT_PROPERTY_OVERRIDES += vendor.debug.ssrdump.type=sscoredump
 
-# Modem
-ifneq ($(BOARD_WITHOUT_RADIO),true)
-PRODUCT_PACKAGES += dump_modem
-endif
-
 # Thermal
 PRODUCT_PACKAGES += android.hardware.thermal-service.pixel
 
