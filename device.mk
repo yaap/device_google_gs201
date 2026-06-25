@@ -30,12 +30,6 @@ DEVICE_PRODUCT_COMPATIBILITY_MATRIX_FILE += \
 # sscoredump
 PRODUCT_PROPERTY_OVERRIDES += vendor.debug.ssrdump.type=sscoredump
 
-# Thermal
-PRODUCT_PACKAGES += android.hardware.thermal-service.pixel
-
-# Thermal utils
-PRODUCT_PACKAGES += thermal_symlinks
-
 # Ensure enough free space to create zram backing device
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.zram_backing_device_min_free_mb=1536
@@ -274,10 +268,6 @@ endif
 
 # IRQ rebalancing.
 include hardware/google/pixel/rebalance_interrupts/rebalance_interrupts.mk
-
-# PowerStats HAL
-PRODUCT_PACKAGES += \
-	android.hardware.power.stats-service.pixel
 
 #
 # Audio HALs
